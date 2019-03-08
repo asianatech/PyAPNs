@@ -307,7 +307,7 @@ class PayloadTooLargeError(Exception):
 class Payload(object):
     """A class representing an APNs message payload"""
     def __init__(self, alert=None, badge=None, sound=None, category=None, custom=None, content_available=False,
-                 mutable_content=False):
+                 mutable_content=False, thread_id=None):
         super(Payload, self).__init__()
         self.alert = alert
         self.badge = badge
@@ -316,6 +316,7 @@ class Payload(object):
         self.custom = custom
         self.content_available = content_available
         self.mutable_content = mutable_content
+        self.thread_id = thread_id
         self._check_size()
 
     def dict(self):
@@ -340,6 +341,9 @@ class Payload(object):
 
         if self.mutable_content:
             d.update({'mutable-content': 1})
+
+        if self.thread_id:
+            d['thread-id'] = self.thread_id
 
         d = { 'aps': d }
         if self.custom:
